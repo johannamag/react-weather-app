@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Weather.css";
-import FormatedDate from "./FormatedDate";
+import WeatherInfo from "./WeatherInfo";
 
 export default function Weather(props) {
-  const [data, setData] = useState({ ready: false });
+  const [weatherdata, setWeatherdata] = useState({ ready: false });
 
   function handleResponse(response) {
-    setData({
+    setWeatherdata({
       temperature: response.data.main.temp,
       ready: true,
       wind: response.data.wind.speed,
@@ -19,7 +19,7 @@ export default function Weather(props) {
     });
   }
 
-  if (data.ready) {
+  if (weatherdata.ready) {
     return (
       <div className="Weather">
         <form>
@@ -42,40 +42,11 @@ export default function Weather(props) {
             </div>
           </div>
         </form>
-        <h1>{data.city}</h1>
-        <ul>
-          <li>
-            <FormatedDate date={data.date} />
-          </li>
-          <li className="text-capitalize">{data.description}</li>
-        </ul>
-        <div className="row mt-3">
-          <div className="col-6">
-            <div className="clearfix">
-              <img
-                src={data.icon}
-                alt={data.description}
-                className="float-left"
-              />
-              <div className="float-left">
-                <span className="temperature">
-                  {Math.round(data.temperature)}
-                </span>
-                <span className="unit">°C</span>
-              </div>
-            </div>
-          </div>
-          <div className="col-6">
-            <ul>
-              <li>Humidity: {data.humidity}%</li>
-              <li>Wind: {Math.round(data.wind)}km/h</li>
-            </ul>
-          </div>
-        </div>
+        <WeatherInfo info={weatherdata} />
       </div>
     );
   } else {
-    const apiKey = "775303597615dd496a6656b7e9300086";
+    const apiKey = "c90c4a455e1973704f6aa4951d1a6b90";
     let apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(handleResponse);
 
